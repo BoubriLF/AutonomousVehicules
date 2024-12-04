@@ -56,14 +56,16 @@ class PIDLongitudinalController():
         self._error_buffer.append(error)
 
         ###################### TODO ######################
+        #TODO : if error add - sign on the equation 
         if len(self._error_buffer) >= 2:
-            _de = ##TODO
-            _ie = ##TODO
+            #output_right = self.Kd * (error - self.prev_error)/dt
+            _de = self._k_d * (error - self._error_buffer[len(self._error_buffer)-2])/self._dt
+            _ie = self._k_i * sum(self._error_buffer) * self._dt
         else:
             _de = 0.0
             _ie = 0.0
         
-        control = ##TODO
+        control = self._k_p * error + _de + _ie 
  
         return np.clip(control, -1.0, 1.0)
         ###################### TODO ######################
@@ -155,13 +157,13 @@ class PIDLateralController():
         self._e_buffer.append(_dot)
 
         if len(self._e_buffer) >= 2:
-            _de = ##TODO
-            _ie = ##TODO
+            _de = self._k_d * (_dot - self._e_buffer[len(self._e_buffer)-2])/self._dt
+            _ie = self._k_i * sum(self._e_buffer) * self._dt
         else:
             _de = 0.0
             _ie = 0.0
 
-        control = ##TODO
+        control = self._k_p * _dot + _de + _ie
  
         return np.clip(control, -1.0, 1.0)
         ###################### TODO ######################
